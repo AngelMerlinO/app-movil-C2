@@ -50,7 +50,7 @@ class _SpeechToTextViewState extends State<SpeechToTextView> {
     speech.listen(
       onResult: resultListener,
       onSoundLevelChange: soundLevelListener,
-      localeId: 'es_ES',  // Idioma por defecto (cambiar si es necesario)
+      localeId: 'es_ES',
       listenFor: const Duration(seconds: 30),
       pauseFor: const Duration(seconds: 3),
     );
@@ -96,9 +96,23 @@ class _SpeechToTextViewState extends State<SpeechToTextView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Speech to Text'),
+        backgroundColor: Colors.white,
+        title: const Text(
+          'Voz a texto',
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
-      body: Padding(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blueGrey.shade100, Colors.white],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
@@ -109,15 +123,10 @@ class _SpeechToTextViewState extends State<SpeechToTextView> {
               stopListening,
             ),
             const SizedBox(height: 20),
-
-            // Widget que muestra las palabras reconocidas
             RecognitionResultsWidget(lastWords: lastWords, level: level),
             const SizedBox(height: 20),
-
-            // Widget que muestra si hay un error
             ErrorWidget(lastError: lastError),
-
-            // Barra que muestra el estado del micrófono
+            const SizedBox(height: 20),
             SpeechStatusWidget(speech: speech),
           ],
         ),
@@ -143,11 +152,23 @@ class SpeechControlWidget extends StatelessWidget {
       children: <Widget>[
         ElevatedButton(
           onPressed: !hasSpeech || isListening ? null : startListening,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.blue,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+          ),
           child: const Text('Escuchar'),
         ),
         const SizedBox(width: 16),
         ElevatedButton(
           onPressed: isListening ? stopListening : null,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.redAccent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+          ),
           child: const Text('Detener'),
         ),
       ],
@@ -169,13 +190,23 @@ class RecognitionResultsWidget extends StatelessWidget {
         children: <Widget>[
           const Text(
             'Palabras reconocidas:',
-            style: TextStyle(fontSize: 22.0),
+            style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
           Expanded(
             child: Container(
               padding: const EdgeInsets.all(12),
-              color: Colors.blue[50],
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    spreadRadius: 2,
+                    blurRadius: 10,
+                  ),
+                ],
+              ),
               child: Center(
                 child: Text(
                   lastWords.isNotEmpty ? lastWords : 'Habla algo para comenzar...',
@@ -219,7 +250,10 @@ class SpeechStatusWidget extends StatelessWidget {
       child: Center(
         child: Text(
           speech.isListening ? "Escuchando..." : 'Micrófono apagado',
-          style: const TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
         ),
       ),
     );
@@ -247,7 +281,7 @@ class MicLevelIndicator extends StatelessWidget {
           ),
         ],
       ),
-      child: Icon(
+      child: const Icon(
         Icons.mic,
         color: Colors.blueAccent,
         size: 30,

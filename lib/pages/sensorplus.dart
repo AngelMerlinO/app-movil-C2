@@ -6,7 +6,6 @@ class SensorPlusPage extends StatefulWidget {
   const SensorPlusPage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _SensorPlusPageState createState() => _SensorPlusPageState();
 }
 
@@ -48,19 +47,76 @@ class _SensorPlusPageState extends State<SensorPlusPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sensor Plus Page'),
+        backgroundColor: Colors.white,
+        title: const Text(
+          'Sensores',
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
-      body: Padding(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blueGrey.shade100, Colors.white],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
         padding: const EdgeInsets.all(16.0),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text('Accelerometer: $accelerometer'),
-              SizedBox(height: 8.0),
+              Container(
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black12,
+                      spreadRadius: 2,
+                      blurRadius: 10,
+                    ),
+                  ],
+                ),
+                child: Column(
+                  children: [
+                    const Text(
+                      'Accelerometer',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
+                    ),
+                    const SizedBox(height: 8.0),
+                    Text(
+                      accelerometer.toString(),
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.black87,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _toggleTorch,
-                child: Text(_isTorchOn ? 'Turn off Torch' : 'Turn on Torch'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: _isTorchOn ? Colors.red : Colors.blue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                ),
+                child: Text(
+                  _isTorchOn ? 'Turn off Torch' : 'Turn on Torch',
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
               ),
             ],
           ),

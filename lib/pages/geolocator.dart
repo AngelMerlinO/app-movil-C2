@@ -21,7 +21,6 @@ class _LocationStatusScreenState extends State<LocationStatusScreen> {
     bool serviceEnabled;
     LocationPermission permission;
 
-    // Verificar si los servicios de ubicación están habilitados
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
       setState(() {
@@ -30,7 +29,6 @@ class _LocationStatusScreenState extends State<LocationStatusScreen> {
       return;
     }
 
-    // Verificar los permisos de localización
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
@@ -49,11 +47,9 @@ class _LocationStatusScreenState extends State<LocationStatusScreen> {
       return;
     }
 
-    // Obtener la ubicación actual
     Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     DateTime currentTime = DateTime.now();
 
-    // Verificar si la ubicación es falsa (solo en Android)
     bool isMocked = position.isMocked;
 
     if (isMocked) {
@@ -63,10 +59,6 @@ class _LocationStatusScreenState extends State<LocationStatusScreen> {
       return;
     }
 
-    // Debugging - Imprimir la ubicación actual
-    print('Nueva ubicación: ${position.latitude}, ${position.longitude}');
-
-    // Validar anomalías en la ubicación
     if (_lastPosition != null && _lastUpdateTime != null) {
       double distance = Geolocator.distanceBetween(
         _lastPosition!.latitude,
@@ -76,9 +68,6 @@ class _LocationStatusScreenState extends State<LocationStatusScreen> {
       );
 
       int timeDifference = currentTime.difference(_lastUpdateTime!).inSeconds;
-
-      print('Distancia: $distance metros');
-      print('Diferencia de tiempo: $timeDifference segundos');
 
       if (distance > _thresholdDistance && timeDifference < _minTimeBetweenUpdates) {
         setState(() {
@@ -90,13 +79,11 @@ class _LocationStatusScreenState extends State<LocationStatusScreen> {
         });
       }
     } else {
-      // Si es la primera vez, simplemente almacenamos la ubicación
       setState(() {
         _locationStatus = 'Ubicación REAL: ${position.latitude}, ${position.longitude}';
       });
     }
 
-    // Actualizar los valores de la última posición y tiempo
     _lastPosition = position;
     _lastUpdateTime = currentTime;
   }
@@ -117,14 +104,19 @@ class _LocationStatusScreenState extends State<LocationStatusScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Estado de la ubicación'),
-        backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+        title: const Text(
+          'Ubicacion en tiempo real ',
+          style: TextStyle(color: Colors.black),
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: Container(
         padding: const EdgeInsets.all(20.0),
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [const Color.fromARGB(255, 248, 248, 248)!, const Color.fromARGB(255, 255, 255, 255)!],
+            colors: [Colors.blueGrey.shade100, Colors.white],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -157,17 +149,25 @@ class _LocationStatusScreenState extends State<LocationStatusScreen> {
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: _getLocationStatus, // Actualizamos la ubicación al hacer clic
+                    onPressed: _getLocationStatus,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 79, 235, 124),
+                      backgroundColor: Colors.blue,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                     ),
                     child: const Text('Actualizar Ubicación'),
                   ),
                   const SizedBox(height: 20),
                   ElevatedButton(
-                    onPressed: _lastPosition != null ? _openInGoogleMaps : null, // Abrir Google Maps al hacer clic
+                    onPressed: _lastPosition != null ? _openInGoogleMaps : null,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 79, 235, 124),
+                      backgroundColor: Colors.blue,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                     ),
                     child: const Text('Ver en Google Maps'),
                   ),

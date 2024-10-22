@@ -22,7 +22,6 @@ class _HomeState extends State<Home> {
     await launchUrl(launchUri);
   }
 
-
   // ignore: unused_element
   void _launchSMS(String number) async {
     final Uri launchUri = Uri(
@@ -34,10 +33,8 @@ class _HomeState extends State<Home> {
   }
 
   void _launchGitHub() async {
-    const url = 'https://github.com/Villo29/appmovilutils.git';
-    // ignore: deprecated_member_use
+    const url = 'https://github.com/AngelMerlinO/app-movil-C2';
     if (await canLaunch(url)) {
-      // ignore: deprecated_member_use
       await launch(url);
     } else {
       throw 'No se pudo lanzar $url';
@@ -48,22 +45,30 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.blueGrey,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text(widget.title, style: const TextStyle(fontWeight: FontWeight.bold)),
+            const SizedBox(width: 8),
             IconButton(
-              icon: const Icon(Icons.code),
+              icon: const Icon(Icons.code, color: Colors.white),
               onPressed: _launchGitHub,
             ),
           ],
         ),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            MyTextWidget(controller: _controller),
-          ],
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                MyTextWidget(controller: _controller),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -76,7 +81,6 @@ class MyTextWidget extends StatefulWidget {
   const MyTextWidget({super.key, required this.controller});
 
   @override
-  // ignore: library_private_types_in_public_api
   _MyTextWidgetState createState() => _MyTextWidgetState();
 }
 
@@ -103,24 +107,60 @@ class _MyTextWidgetState extends State<MyTextWidget> {
     return Column(
       children: [
         const Image(
-          image: AssetImage('assets/images/villoimg.jpg'),
+          image: AssetImage('assets/images/imgUno.jpeg'),
           width: 350,
           height: 350,
         ),
-        const SizedBox(height: 10),
-        Row(
-          children: [
-            const Expanded(child: Text('221263 Jesus David Ruiz Garcia')),
-            IconButton(
-              icon: const Icon(Icons.phone),
-              onPressed: () => _launchCaller('9612835436'),
+        const SizedBox(height: 20),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                spreadRadius: 2,
+                blurRadius: 10,
+              ),
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                const Text(
+                  'Jose Angel Ortega Merlin',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Desarrollador de Software\n'
+                  '221255\n'
+                  'Universidad Politécnica de Chiapas',
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.phone, color: Colors.green),
+                      onPressed: () => _launchCaller('9515271070'),
+                    ),
+                    const SizedBox(width: 10),
+                    IconButton(
+                      icon: const Icon(Icons.message, color: Colors.blue),
+                      onPressed: () => _launchSMS('9515271070'),
+                    ),
+                  ],
+                ),
+              ],
             ),
-            const SizedBox(width: 10),
-            IconButton(
-              icon: const Icon(Icons.message),
-              onPressed: () => _launchSMS('9612835436'),
-            ),
-          ],
+          ),
         ),
       ],
     );

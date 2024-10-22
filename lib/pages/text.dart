@@ -26,7 +26,6 @@ class _TextToSpeechViewState extends State<TextToSpeechView> {
     initTts();
   }
 
-  // Inicializa el TTS
   void initTts() {
     flutterTts = FlutterTts();
 
@@ -75,9 +74,8 @@ class _TextToSpeechViewState extends State<TextToSpeechView> {
     });
   }
 
-  // Método para ocultar el teclado
   void _hideKeyboard() {
-    FocusScope.of(context).unfocus(); // Oculta el teclado
+    FocusScope.of(context).unfocus();
   }
 
   @override
@@ -90,9 +88,23 @@ class _TextToSpeechViewState extends State<TextToSpeechView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Text to Speech'),
+        backgroundColor: Colors.white,
+        title: const Text(
+          'Texto a Voz',
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
-      body: Padding(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.blueGrey.shade100, Colors.white],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
           child: Column(
@@ -110,22 +122,27 @@ class _TextToSpeechViewState extends State<TextToSpeechView> {
   }
 
   Widget _inputSection() => Container(
-      alignment: Alignment.topCenter,
-      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-      child: TextField(
-        maxLines: 6, // Permite múltiples líneas
-        minLines: 3,
-        onChanged: _onChange,
-        onSubmitted: (value) {
-          _hideKeyboard();  // Oculta el teclado cuando se presiona "Done"
-          _speak();         // Inicia la conversión de texto a voz al presionar "Done"
-        },
-        textInputAction: TextInputAction.done,  // Cambia el botón "Intro" a "Done"
-        decoration: const InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: 'Introduce el texto a convertir en voz',
+        alignment: Alignment.topCenter,
+        padding: const EdgeInsets.symmetric(horizontal: 25.0),
+        child: TextField(
+          maxLines: 6,
+          minLines: 3,
+          onChanged: _onChange,
+          onSubmitted: (value) {
+            _hideKeyboard();
+            _speak();
+          },
+          textInputAction: TextInputAction.done,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            labelText: 'Introduce el texto a convertir en voz',
+            filled: true,
+            fillColor: Colors.white,
+          ),
         ),
-      ));
+      );
 
   Widget _btnSection() {
     return Row(

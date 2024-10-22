@@ -21,8 +21,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.blue,
+          backgroundColor: Colors.white,
           centerTitle: true,
+          elevation: 0,
+          iconTheme: IconThemeData(color: Colors.black),
+          titleTextStyle: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
         ),
       ),
       home: const MainScreen(),
@@ -41,12 +48,12 @@ class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
   static final List<Widget> _pages = <Widget>[
-    const Home(title: 'Home Page'),
+    const Home(title: 'Inicio'),
     const LocationStatusScreen(),
     QrCodeScanner(),
-    SensorPlusPage(),
-    SpeechToTextView(),
-    TextToSpeechView(),
+    const SensorPlusPage(),
+    const SpeechToTextView(),
+    const TextToSpeechView(),
   ];
 
   void _onItemTapped(int index) {
@@ -60,7 +67,7 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.white,  // Asegura que el fondo sea visible
+        backgroundColor: Colors.white,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
@@ -80,16 +87,18 @@ class _MainScreenState extends State<MainScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.mic),
-            label: 'Habla',
+            label: 'Voz',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.audiotrack),
-            label: 'Sonido',
+            label: 'Texto',
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: const Color.fromARGB(255, 50, 15, 225), // Color del ícono seleccionado
+        selectedItemColor: Colors.blueAccent, // Color del ícono seleccionado
         unselectedItemColor: Colors.grey, // Color de los íconos no seleccionados
+        showUnselectedLabels: true,
+        type: BottomNavigationBarType.fixed,
         onTap: _onItemTapped,
       ),
     );
