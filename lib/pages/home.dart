@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key, required this.title});
@@ -13,7 +14,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final TextEditingController _controller = TextEditingController();
 
-  // ignore: unused_element
   void _launchCaller(String number) async {
     final Uri launchUri = Uri(
       scheme: 'tel',
@@ -22,7 +22,6 @@ class _HomeState extends State<Home> {
     await launchUrl(launchUri);
   }
 
-  // ignore: unused_element
   void _launchSMS(String number) async {
     final Uri launchUri = Uri(
       scheme: 'sms',
@@ -46,17 +45,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.blueGrey,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(widget.title, style: const TextStyle(fontWeight: FontWeight.bold)),
-            const SizedBox(width: 8),
-            IconButton(
-              icon: const Icon(Icons.code, color: Colors.white),
-              onPressed: _launchGitHub,
-            ),
-          ],
-        ),
+        title: Text(widget.title, style: const TextStyle(fontWeight: FontWeight.bold)),
       ),
       body: Center(
         child: SingleChildScrollView(
@@ -69,6 +58,19 @@ class _HomeState extends State<Home> {
               ],
             ),
           ),
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.blueGrey,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            IconButton(
+              icon: const FaIcon(FontAwesomeIcons.github, color: Colors.white),
+              onPressed: _launchGitHub,
+              tooltip: 'GitHub',
+            ),
+          ],
         ),
       ),
     );

@@ -11,16 +11,32 @@ class SensorPlusPage extends StatefulWidget {
 
 class _SensorPlusPageState extends State<SensorPlusPage> {
   List<double> _accelerometerValues = [0.0, 0.0, 0.0];
+  List<double> _gyroscopeValues = [0.0, 0.0, 0.0];
+  List<double> _magnetometerValues = [0.0, 0.0, 0.0];
   bool _isTorchOn = false;
 
   @override
   void initState() {
     super.initState();
 
-    // ignore: deprecated_member_use
+    // Listen to accelerometer events
     accelerometerEvents.listen((AccelerometerEvent event) {
       setState(() {
         _accelerometerValues = <double>[event.x, event.y, event.z];
+      });
+    });
+
+    // Listen to gyroscope events
+    gyroscopeEvents.listen((GyroscopeEvent event) {
+      setState(() {
+        _gyroscopeValues = <double>[event.x, event.y, event.z];
+      });
+    });
+
+    // Listen to magnetometer events
+    magnetometerEvents.listen((MagnetometerEvent event) {
+      setState(() {
+        _magnetometerValues = <double>[event.x, event.y, event.z];
       });
     });
   }
@@ -36,7 +52,6 @@ class _SensorPlusPageState extends State<SensorPlusPage> {
         _isTorchOn = !_isTorchOn;
       });
     } catch (e) {
-      // ignore: avoid_print
       print('Error: $e');
     }
   }
@@ -44,6 +59,8 @@ class _SensorPlusPageState extends State<SensorPlusPage> {
   @override
   Widget build(BuildContext context) {
     final List<String> accelerometer = _accelerometerValues.map((double v) => v.toStringAsFixed(1)).toList();
+    final List<String> gyroscope = _gyroscopeValues.map((double v) => v.toStringAsFixed(1)).toList();
+    final List<String> magnetometer = _magnetometerValues.map((double v) => v.toStringAsFixed(1)).toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -69,40 +86,11 @@ class _SensorPlusPageState extends State<SensorPlusPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      spreadRadius: 2,
-                      blurRadius: 10,
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    const Text(
-                      'Accelerometer',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                    const SizedBox(height: 8.0),
-                    Text(
-                      accelerometer.toString(),
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.black87,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              ),
+              _buildSensorCard('Accelerometer', accelerometer),
+              const SizedBox(height: 20),
+              _buildSensorCard('Gyroscope', gyroscope),
+              const SizedBox(height: 20),
+              _buildSensorCard('Magnetometer', magnetometer),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _toggleTorch,
@@ -114,13 +102,50 @@ class _SensorPlusPageState extends State<SensorPlusPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 ),
                 child: Text(
-                  _isTorchOn ? 'Turn off Torch' : 'Turn on Torch',
+                  _isTorchOn ? 'On linterna' : 'off linterna',
                   style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildSensorCard(String title, List<String> values) {
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            spreadRadius: 2,
+            blurRadius: 10,
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+          ),
+          const SizedBox(height: 8.0),
+          Text(
+            values.toString(),
+            style: const TextStyle(
+              fontSize: 16,
+              color: Colors.black87,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }
